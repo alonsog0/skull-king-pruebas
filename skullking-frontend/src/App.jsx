@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
+const backendUrl = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080').replace(/\/+$/, '');
+const socketUrl = `${backendUrl}/ws-skullking`;
+
 export default function App() {
   const [connected, setConnected] = useState(false);
   const [broadcastMessages, setBroadcastMessages] = useState([]);
@@ -29,7 +32,7 @@ export default function App() {
      *    El backend (WebSocketConfig) la lee y le asigna identidad a esta conexión.
      */
     const client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws-skullking'),
+      webSocketFactory: () => new SockJS(socketUrl),
       connectHeaders: {
         user: senderName
       },
